@@ -81,3 +81,48 @@ button:focus-visible {
 #reset-view {
   margin-left: auto;
 }
+
+
+.venue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.venue-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.venue-section h2 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.seat-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.seat {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--seat-available-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.seat.available {
+  background: var(--seat-available);
+}
+
+.seat.unavailable {
+  background: var(--seat-unavailable);
+  border-color: var(--seat-unavailable-border);
+  cursor: not-allowed;
+}
+
