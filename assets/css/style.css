@@ -105,11 +105,7 @@ button:focus-visible {
   margin: 0;
 }
 
-.seat-row {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
+
 
 .seat {
   width: 34px;
@@ -160,10 +156,10 @@ button:focus-visible {
 /* Row labels and seats */
 
 .seat-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
 }
 
 .row-label {
@@ -244,11 +240,6 @@ button:focus-visible {
     margin: 12px 0;
 }
 
-#cart-items li {
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.9rem;
-}
 
 .cart-total {
     margin-top: 16px;
@@ -261,6 +252,9 @@ button:focus-visible {
     justify-content: space-between;
     align-items: center;
     gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
 }
 
 .cart-remove {

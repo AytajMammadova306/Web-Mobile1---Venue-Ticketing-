@@ -287,10 +287,6 @@ venue.addEventListener("click", function(event) {
     if (!clickedSeat || isSeatInCart(clickedSeat)) {
         return;
     }
-    // Ignore clicks that are not on available seats
-    if (!clickedSeat) {
-        return;
-    }
 
     // Reset previously selected seat
     if (selectedSeat !== null) {
