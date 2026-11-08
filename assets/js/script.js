@@ -107,3 +107,54 @@ function generateVenue() {
 }
 
 generateVenue();
+
+
+
+// Currently selected seat
+let selectedSeat = null;
+
+// Get seat detail elements
+const seatDetailsEmpty = document.getElementById("seat-details-empty");
+const seatDetailsInfo = document.getElementById("seat-details-info");
+
+const detailSection = document.getElementById("detail-section");
+const detailRow = document.getElementById("detail-row");
+const detailSeat = document.getElementById("detail-seat");
+const detailPrice = document.getElementById("detail-price");
+const detailStatus = document.getElementById("detail-status");
+
+const addToCartButton = document.getElementById("add-to-cart");
+
+// Listen for seat clicks
+venue.addEventListener("click", function(event) {
+
+    const clickedSeat = event.target.closest(".seat.available");
+
+    // Ignore clicks that are not on available seats
+    if (!clickedSeat) {
+        return;
+    }
+
+    // Reset previously selected seat
+    if (selectedSeat !== null) {
+        selectedSeat.classList.remove("inspected");
+    }
+
+    // Select the new seat
+    selectedSeat = clickedSeat;
+    selectedSeat.classList.add("inspected");
+
+    // Display seat information
+    detailSection.textContent = selectedSeat.dataset.section;
+    detailRow.textContent = selectedSeat.dataset.row;
+    detailSeat.textContent = selectedSeat.dataset.seat;
+    detailPrice.textContent = `$${selectedSeat.dataset.price}`;
+    detailStatus.textContent = "Inspected";
+
+    // Show the details panel
+    seatDetailsEmpty.hidden = true;
+    seatDetailsInfo.hidden = false;
+
+    // Enable Add to Cart button
+    addToCartButton.disabled = false;
+});

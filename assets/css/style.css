@@ -222,3 +222,13 @@ button:focus-visible {
 .swatch.unavailable {
   background: var(--seat-unavailable);
 }
+
+.seat.inspected {
+  background: var(--seat-inspected);
+  border-color: var(--seat-inspected-border);
+}
+
+.seat.center.inspected {
+  background: var(--seat-inspected);
+  border-color: var(--seat-inspected-border);
+}
