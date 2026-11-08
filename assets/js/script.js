@@ -362,3 +362,97 @@ addToCartButton.addEventListener("click", function() {
 
 
 loadCart();
+
+
+const mapContent = document.getElementById("map-content");
+
+// Map navigation values
+let scale = 1;
+let translateX = 0;
+let translateY = 0;
+
+// Navigation limits
+const minScale = 0.7;
+const maxScale = 2;
+const zoomStep = 0.1;
+const moveStep = 40;
+
+// Apply current transformations
+
+
+function updateMapTransform() {
+    const viewport = document.getElementById("map-viewport");
+
+    // Calculate the available movement in each direction
+    const maxX = Math.max(
+        0,
+        (mapContent.offsetWidth * scale - viewport.clientWidth) / 2
+    );
+
+    const maxY = Math.max(
+        0,
+        (mapContent.offsetHeight * scale - viewport.clientHeight) / 2
+    );
+
+    // Prevent the map from moving beyond its boundaries
+    translateX = Math.max(-maxX, Math.min(translateX, maxX));
+    translateY = Math.max(-maxY, Math.min(translateY, maxY));
+
+    mapContent.style.transform =
+        `translate(-50%, -50%) translate(${translateX}px, ${translateY}px) scale(${scale})`;
+}
+
+
+
+// Zoom In
+document.getElementById("zoom-in").addEventListener("click", function() {
+
+    scale = Math.min(scale + zoomStep, maxScale);
+
+    updateMapTransform();
+});
+
+// Zoom Out
+document.getElementById("zoom-out").addEventListener("click", function() {
+
+    scale = Math.max(scale - zoomStep, minScale);
+
+    updateMapTransform();
+});
+
+// Move Up
+document.getElementById("move-up").addEventListener("click", function() {
+
+    translateY -= moveStep;
+
+    updateMapTransform();
+});
+
+// Move Down
+document.getElementById("move-down").addEventListener("click", function() {
+
+    translateY += moveStep;
+
+    updateMapTransform();
+});
+
+// Move Left
+document.getElementById("move-left").addEventListener("click", function() {
+
+    translateX -= moveStep;
+
+    updateMapTransform();
+});
+
+// Move Right
+document.getElementById("move-right").addEventListener("click", function() {
+
+    translateX += moveStep;
+
+    updateMapTransform();
+});
+
+
+
+// Set the initial map position when the page loads
+updateMapTransform();
