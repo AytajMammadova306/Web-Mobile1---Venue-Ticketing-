@@ -214,12 +214,26 @@ function updateSeatState(seat, newState) {
 }
 
 
+function isSeatInCart(seat) {
+
+    return cart.some(item =>
+        item.section === seat.dataset.section &&
+        item.row === seat.dataset.row &&
+        item.seat === seat.dataset.seat
+    );
+}
+
+
+
 
 // Listen for seat clicks
 venue.addEventListener("click", function(event) {
 
     const clickedSeat = event.target.closest(".seat.available");
 
+    if (!clickedSeat || isSeatInCart(clickedSeat)) {
+        return;
+    }
     // Ignore clicks that are not on available seats
     if (!clickedSeat) {
         return;
@@ -257,7 +271,9 @@ addToCartButton.addEventListener("click", function() {
     if (selectedSeat === null) {
         return;
     }
-
+    if (isSeatInCart(selectedSeat)) {
+        return;
+    }
     // Create a ticket object
     const ticket = {
         section: selectedSeat.dataset.section,
