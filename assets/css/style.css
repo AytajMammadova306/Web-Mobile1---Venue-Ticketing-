@@ -304,3 +304,163 @@ button:focus-visible {
 
     transition: transform 0.2s ease;
 }
+
+
+/* Main application layout */
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 24px;
+    padding: 24px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.map-section {
+    min-width: 0;
+}
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+}
+/* ============================= */
+/* Responsive Design             */
+/* ============================= */
+
+
+/* Tablets */
+
+@media (max-width: 1000px) {
+
+    .layout {
+        grid-template-columns: minmax(0, 1fr) 260px;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .map-viewport {
+        height: 500px;
+    }
+
+    .venue {
+        gap: 16px;
+    }
+
+    .seat {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+
+    .seat-row {
+        gap: 5px;
+    }
+
+}
+
+
+/* Small tablets and mobile */
+
+@media (max-width: 768px) {
+
+    .layout {
+        grid-template-columns: 1fr;
+        padding: 12px;
+        gap: 20px;
+    }
+
+    .map-viewport {
+        height: 500px;
+    }
+
+    .map-controls {
+        gap: 6px;
+    }
+
+    .map-controls button {
+        flex: 1 1 auto;
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+
+    #reset-view {
+        margin-left: 0;
+    }
+
+    .side-panel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+}
+
+
+/* Small mobile screens */
+
+@media (max-width: 480px) {
+
+    .layout {
+        padding: 10px;
+    }
+
+    .site-header {
+        padding: 12px;
+    }
+
+    .map-viewport {
+        height: 420px;
+    }
+
+    .map-controls button {
+        flex: 1 1 calc(33.333% - 6px);
+        font-size: 0.8rem;
+        padding: 7px 4px;
+    }
+
+    .venue {
+        gap: 12px;
+    }
+
+    .venue-section {
+        gap: 8px;
+    }
+
+    .seat {
+        width: 26px;
+        height: 26px;
+        font-size: 0.7rem;
+    }
+
+    .seat-row {
+        gap: 3px;
+    }
+
+    .row-label {
+        width: 12px;
+        font-size: 0.75rem;
+        margin-right: 2px;
+    }
+
+    .venue-section h2 {
+        font-size: 0.85rem;
+    }
+
+    .section-price {
+        font-size: 0.75rem;
+    }
+
+    .side-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .legend {
+        gap: 10px;
+        font-size: 0.8rem;
+    }
+
+}
