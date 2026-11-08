@@ -26,7 +26,6 @@ const venueData = [
     }
 ];
 
-// Stores tickets added by the user
 let cart = [];
 
 const venue = document.getElementById("venue");
@@ -37,11 +36,9 @@ function generateVenue() {
 
     venueData.forEach(section => {
 
-        // Create a section container
         const sectionElement = document.createElement("div");
         sectionElement.classList.add("venue-section");
 
-        // Create section heading
         const heading = document.createElement("h2");
         heading.textContent = section.name;
 
@@ -52,7 +49,6 @@ function generateVenue() {
         sectionElement.appendChild(heading);
         sectionElement.appendChild(priceInfo);
 
-        // Generate rows
         for (let i = 0; i < section.rows; i++) {
 
             const rowLetter = String.fromCharCode(65 + i);
@@ -66,7 +62,6 @@ function generateVenue() {
 
             rowElement.appendChild(rowLabel);
 
-            // Generate seats in each row
             for (let j = 1; j <= section.seatsPerRow; j++) {
 
                 const seatId = `${rowLetter}-${j}`;
@@ -131,7 +126,6 @@ function renderCart() {
         removeButton.classList.add("cart-remove");
         removeButton.textContent = "Remove";
 
-        // Remove the corresponding ticket
         removeButton.addEventListener("click", function() {
             removeTicket(index);
         });
@@ -159,10 +153,8 @@ function saveCart() {
 
 function removeTicket(index) {
 
-    // Get the ticket being removed
     const removedTicket = cart[index];
 
-    // Find its corresponding seat on the venue map
     const seat = Array.from(venue.querySelectorAll(".seat"))
         .find(seat =>
             seat.dataset.section === removedTicket.section &&
@@ -170,16 +162,13 @@ function removeTicket(index) {
             seat.dataset.seat === removedTicket.seat
         );
 
-    // Restore the seat's available state
     if (seat) {
         updateSeatState(seat, "available");
     }
 
-    // Remove the ticket from the cart
     cart.splice(index, 1);
     saveCart();
 
-    // Refresh cart display and total
     renderCart();
 }
 
@@ -203,7 +192,6 @@ function loadCart() {
 
         cart = storedCart;
 
-        // Restore corresponding seat states
         const seats = venue.querySelectorAll(".seat");
 
         seats.forEach(seat => {
@@ -214,7 +202,6 @@ function loadCart() {
 
         });
 
-        // Update cart display and total
         renderCart();
 
     } catch (error) {
@@ -230,10 +217,8 @@ function loadCart() {
 
 
 
-// Currently selected seat
 let selectedSeat = null;
 
-// Get seat detail elements
 const seatDetailsEmpty = document.getElementById("seat-details-empty");
 const seatDetailsInfo = document.getElementById("seat-details-info");
 
@@ -279,8 +264,13 @@ function isSeatInCart(seat) {
 
 
 
-// Listen for seat clicks
 venue.addEventListener("click", function(event) {
+
+    if (suppressNextClick) {
+        suppressNextClick = false;
+        event.preventDefault();
+        return;
+    }
 
     const clickedSeat = event.target.closest(".seat.available");
 
@@ -288,27 +278,22 @@ venue.addEventListener("click", function(event) {
         return;
     }
 
-    // Reset previously selected seat
     if (selectedSeat !== null) {
         updateSeatState(selectedSeat, "available");
     }
 
-    // Select the new seat
     selectedSeat = clickedSeat;
     updateSeatState(selectedSeat, "inspected");
 
-    // Display seat information
     detailSection.textContent = selectedSeat.dataset.section;
     detailRow.textContent = selectedSeat.dataset.row;
     detailSeat.textContent = selectedSeat.dataset.seat;
     detailPrice.textContent = `$${selectedSeat.dataset.price}`;
     detailStatus.textContent = "Inspected";
 
-    // Show the details panel
     seatDetailsEmpty.hidden = true;
     seatDetailsInfo.hidden = false;
 
-    // Enable Add to Cart button
     addToCartButton.disabled = false;
 });
 
@@ -316,14 +301,12 @@ venue.addEventListener("click", function(event) {
 
 addToCartButton.addEventListener("click", function() {
 
-    // Make sure a seat is selected
     if (selectedSeat === null) {
         return;
     }
     if (isSeatInCart(selectedSeat)) {
         return;
     }
-    // Create a ticket object
     const ticket = {
         section: selectedSeat.dataset.section,
         row: selectedSeat.dataset.row,
@@ -331,24 +314,18 @@ addToCartButton.addEventListener("click", function() {
         price: Number(selectedSeat.dataset.price)
     };
 
-    // Add ticket to cart
     cart.push(ticket);
     saveCart();
 
-    // Change seat state to in-cart
     updateSeatState(selectedSeat, "in-cart");
 
-    // Clear current selection
     selectedSeat = null;
 
-    // Reset seat details panel
     seatDetailsEmpty.hidden = false;
     seatDetailsInfo.hidden = true;
 
-    // Disable Add to Cart button
     addToCartButton.disabled = true;
 
-    // Update cart display
     renderCart();
 
 });
@@ -360,37 +337,30 @@ addToCartButton.addEventListener("click", function() {
 loadCart();
 
 
+const mapViewport = document.getElementById("map-viewport");
 const mapContent = document.getElementById("map-content");
 
-// Map navigation values
 let scale = 1;
 let translateX = 0;
 let translateY = 0;
 
-// Navigation limits
 const minScale = 0.7;
 const maxScale = 2;
 const zoomStep = 0.1;
 const moveStep = 40;
 
-// Apply current transformations
-
 
 function updateMapTransform() {
-    const viewport = document.getElementById("map-viewport");
 
-    // Calculate the available movement in each direction
     const maxX = Math.max(
         0,
-        (mapContent.offsetWidth * scale - viewport.clientWidth) / 2
+        (mapContent.offsetWidth * scale - mapViewport.clientWidth) / 2
     );
 
     const maxY = Math.max(
         0,
-        (mapContent.offsetHeight * scale - viewport.clientHeight) / 2
+        (mapContent.offsetHeight * scale - mapViewport.clientHeight) / 2
     );
-
-    // Prevent the map from moving beyond its boundaries
     translateX = Math.max(-maxX, Math.min(translateX, maxX));
     translateY = Math.max(-maxY, Math.min(translateY, maxY));
 
@@ -400,7 +370,6 @@ function updateMapTransform() {
 
 
 
-// Zoom In
 document.getElementById("zoom-in").addEventListener("click", function() {
 
     scale = Math.min(scale + zoomStep, maxScale);
@@ -408,7 +377,6 @@ document.getElementById("zoom-in").addEventListener("click", function() {
     updateMapTransform();
 });
 
-// Zoom Out
 document.getElementById("zoom-out").addEventListener("click", function() {
 
     scale = Math.max(scale - zoomStep, minScale);
@@ -416,7 +384,6 @@ document.getElementById("zoom-out").addEventListener("click", function() {
     updateMapTransform();
 });
 
-// Move Up
 document.getElementById("move-up").addEventListener("click", function() {
 
     translateY -= moveStep;
@@ -424,7 +391,6 @@ document.getElementById("move-up").addEventListener("click", function() {
     updateMapTransform();
 });
 
-// Move Down
 document.getElementById("move-down").addEventListener("click", function() {
 
     translateY += moveStep;
@@ -432,7 +398,6 @@ document.getElementById("move-down").addEventListener("click", function() {
     updateMapTransform();
 });
 
-// Move Left
 document.getElementById("move-left").addEventListener("click", function() {
 
     translateX -= moveStep;
@@ -440,7 +405,6 @@ document.getElementById("move-left").addEventListener("click", function() {
     updateMapTransform();
 });
 
-// Move Right
 document.getElementById("move-right").addEventListener("click", function() {
 
     translateX += moveStep;
@@ -449,7 +413,6 @@ document.getElementById("move-right").addEventListener("click", function() {
 });
 
 
-// Reset the map to its original position and zoom
 document.getElementById("reset-view").addEventListener("click", function() {
     scale = 1;
     translateX = 0;
@@ -458,8 +421,104 @@ document.getElementById("reset-view").addEventListener("click", function() {
     updateMapTransform();
 });
 
+mapViewport.addEventListener("wheel", function(event) {
+    event.preventDefault();
+
+    if (event.deltaY < 0) {
+        scale = Math.min(scale + zoomStep, maxScale);
+    } else {
+        scale = Math.max(scale - zoomStep, minScale);
+    }
+
+    updateMapTransform();
+}, { passive: false });
 
 
+let isPointerDown = false;
+let isDragging = false;
+let suppressNextClick = false;
 
-// Set the initial map position when the page loads
+let startX = 0;
+let startY = 0;
+
+let initialTranslateX = 0;
+let initialTranslateY = 0;
+
+
+mapViewport.addEventListener("pointerdown", function(event) {
+
+    if (event.pointerType === "mouse" && event.button !== 0) {
+        return;
+    }
+
+    isPointerDown = true;
+    isDragging = false;
+
+    startX = event.clientX;
+    startY = event.clientY;
+
+    initialTranslateX = translateX;
+    initialTranslateY = translateY;
+
+    suppressNextClick = false;
+
+    event.target.setPointerCapture(event.pointerId);
+
+});
+
+
+mapViewport.addEventListener("pointermove", function(event) {
+
+    if (!isPointerDown) {
+        return;
+    }
+
+    const deltaX = event.clientX - startX;
+    const deltaY = event.clientY - startY;
+    if (!isDragging && Math.hypot(deltaX, deltaY) > 5) {
+        isDragging = true;
+    }
+
+    if (!isDragging) {
+        return;
+    }
+
+    translateX = initialTranslateX + deltaX;
+    translateY = initialTranslateY + deltaY;
+
+    updateMapTransform();
+
+});
+
+
+mapViewport.addEventListener("pointerup", function() {
+
+    if (isDragging) {
+        suppressNextClick = true;
+    }
+
+    isPointerDown = false;
+    isDragging = false;
+
+});
+
+
+mapViewport.addEventListener("pointercancel", function() {
+
+    isPointerDown = false;
+    isDragging = false;
+
+});
+
+mapViewport.addEventListener("click", function(event) {
+
+    if (suppressNextClick) {
+        suppressNextClick = false;
+
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+}, true);
+
 updateMapTransform();
