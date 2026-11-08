@@ -44,7 +44,12 @@ function generateVenue() {
         const heading = document.createElement("h2");
         heading.textContent = section.name;
 
+        const priceInfo = document.createElement("p");
+        priceInfo.classList.add("section-price");
+        priceInfo.textContent = `$${section.price} per seat`;
+
         sectionElement.appendChild(heading);
+        sectionElement.appendChild(priceInfo);
 
         // Generate rows
         for (let i = 0; i < section.rows; i++) {
@@ -53,6 +58,12 @@ function generateVenue() {
 
             const rowElement = document.createElement("div");
             rowElement.classList.add("seat-row");
+
+            const rowLabel = document.createElement("span");
+            rowLabel.classList.add("row-label");
+            rowLabel.textContent = rowLetter;
+
+            rowElement.appendChild(rowLabel);
 
             // Generate seats in each row
             for (let j = 1; j <= section.seatsPerRow; j++) {

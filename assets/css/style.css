@@ -132,3 +132,93 @@ button:focus-visible {
   background: var(--seat-center);
   border-color: var(--seat-center-border);
 }
+
+
+/* Stage */
+
+.stage {
+  width: 280px;
+  max-width: 90%;
+  padding: 12px;
+  margin: 0 auto 24px;
+  text-align: center;
+  font-weight: 600;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+/* Section information */
+
+.section-price {
+  margin: -8px 0 4px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* Row labels and seats */
+
+.seat-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.row-label {
+  width: 16px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-right: 4px;
+}
+
+.seat {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.swatch {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+}
+
+.swatch.available {
+  background: var(--seat-available);
+}
+
+.swatch.inspected {
+  background: var(--seat-inspected);
+}
+
+.swatch.in-cart {
+  background: var(--seat-in-cart);
+}
+
+.swatch.unavailable {
+  background: var(--seat-unavailable);
+}
