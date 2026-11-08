@@ -453,6 +453,17 @@ document.getElementById("move-right").addEventListener("click", function() {
 });
 
 
+// Reset the map to its original position and zoom
+document.getElementById("reset-view").addEventListener("click", function() {
+    scale = 1;
+    translateX = 0;
+    translateY = 0;
+
+    updateMapTransform();
+});
+
+
+
 
 // Set the initial map position when the page loads
 updateMapTransform();
