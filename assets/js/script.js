@@ -26,7 +26,8 @@ const venueData = [
     }
 ];
 
-
+// Stores tickets added by the user
+let cart = [];
 
 const venue = document.getElementById("venue");
 
@@ -104,6 +105,37 @@ function generateVenue() {
 generateVenue();
 
 
+function renderCart() {
+
+    const cartItems = document.getElementById("cart-items");
+    const cartEmpty = document.getElementById("cart-empty");
+    const cartTotal = document.getElementById("cart-total");
+
+    // Clear previous cart display
+    cartItems.innerHTML = "";
+
+    let total = 0;
+
+    // Display every ticket
+    cart.forEach(item => {
+
+        const listItem = document.createElement("li");
+
+        listItem.textContent =
+            `${item.section} - Row ${item.row}, Seat ${item.seat} - $${item.price}`;
+
+        cartItems.appendChild(listItem);
+
+        total += item.price;
+    });
+
+    // Update empty cart message
+    cartEmpty.hidden = cart.length > 0;
+
+    // Update total price
+    cartTotal.textContent = `$${total}`;
+}
+
 
 // Currently selected seat
 let selectedSeat = null;
@@ -176,3 +208,43 @@ venue.addEventListener("click", function(event) {
     // Enable Add to Cart button
     addToCartButton.disabled = false;
 });
+
+
+
+addToCartButton.addEventListener("click", function() {
+
+    // Make sure a seat is selected
+    if (selectedSeat === null) {
+        return;
+    }
+
+    // Create a ticket object
+    const ticket = {
+        section: selectedSeat.dataset.section,
+        row: selectedSeat.dataset.row,
+        seat: selectedSeat.dataset.seat,
+        price: Number(selectedSeat.dataset.price)
+    };
+
+    // Add ticket to cart
+    cart.push(ticket);
+
+    // Change seat state to in-cart
+    updateSeatState(selectedSeat, "in-cart");
+
+    // Clear current selection
+    selectedSeat = null;
+
+    // Reset seat details panel
+    seatDetailsEmpty.hidden = false;
+    seatDetailsInfo.hidden = true;
+
+    // Disable Add to Cart button
+    addToCartButton.disabled = true;
+
+    // Update cart display
+    renderCart();
+
+});
+
+
