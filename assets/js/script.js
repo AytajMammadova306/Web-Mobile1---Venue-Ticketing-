@@ -150,6 +150,13 @@ function renderCart() {
 }
 
 
+function saveCart() {
+
+    localStorage.setItem("venueCart", JSON.stringify(cart));
+
+}
+
+
 function removeTicket(index) {
 
     // Get the ticket being removed
@@ -170,9 +177,55 @@ function removeTicket(index) {
 
     // Remove the ticket from the cart
     cart.splice(index, 1);
+    saveCart();
 
     // Refresh cart display and total
     renderCart();
+}
+
+
+function loadCart() {
+
+    const savedCart = localStorage.getItem("venueCart");
+
+    if (savedCart === null) {
+        renderCart();
+        return;
+    }
+
+    try {
+
+        const storedCart = JSON.parse(savedCart);
+
+        if (!Array.isArray(storedCart)) {
+            throw new Error("Invalid cart data");
+        }
+
+        cart = storedCart;
+
+        // Restore corresponding seat states
+        const seats = venue.querySelectorAll(".seat");
+
+        seats.forEach(seat => {
+
+            if (isSeatInCart(seat)) {
+                updateSeatState(seat, "in-cart");
+            }
+
+        });
+
+        // Update cart display and total
+        renderCart();
+
+    } catch (error) {
+
+        console.error("Could not restore cart:", error);
+
+        cart = [];
+        localStorage.removeItem("venueCart");
+
+        renderCart();
+    }
 }
 
 
@@ -284,6 +337,7 @@ addToCartButton.addEventListener("click", function() {
 
     // Add ticket to cart
     cart.push(ticket);
+    saveCart();
 
     // Change seat state to in-cart
     updateSeatState(selectedSeat, "in-cart");
@@ -304,3 +358,7 @@ addToCartButton.addEventListener("click", function() {
 });
 
 
+
+
+
+loadCart();
