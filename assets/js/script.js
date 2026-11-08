@@ -105,36 +105,76 @@ function generateVenue() {
 generateVenue();
 
 
+
 function renderCart() {
 
     const cartItems = document.getElementById("cart-items");
     const cartEmpty = document.getElementById("cart-empty");
     const cartTotal = document.getElementById("cart-total");
 
-    // Clear previous cart display
     cartItems.innerHTML = "";
 
     let total = 0;
 
-    // Display every ticket
-    cart.forEach(item => {
+    cart.forEach((item, index) => {
 
         const listItem = document.createElement("li");
 
-        listItem.textContent =
+        const ticketInfo = document.createElement("span");
+
+        ticketInfo.textContent =
             `${item.section} - Row ${item.row}, Seat ${item.seat} - $${item.price}`;
+
+        const removeButton = document.createElement("button");
+
+        removeButton.type = "button";
+        removeButton.classList.add("cart-remove");
+        removeButton.textContent = "Remove";
+
+        // Remove the corresponding ticket
+        removeButton.addEventListener("click", function() {
+            removeTicket(index);
+        });
+
+        listItem.appendChild(ticketInfo);
+        listItem.appendChild(removeButton);
 
         cartItems.appendChild(listItem);
 
         total += item.price;
     });
 
-    // Update empty cart message
     cartEmpty.hidden = cart.length > 0;
 
-    // Update total price
     cartTotal.textContent = `$${total}`;
 }
+
+
+function removeTicket(index) {
+
+    // Get the ticket being removed
+    const removedTicket = cart[index];
+
+    // Find its corresponding seat on the venue map
+    const seat = Array.from(venue.querySelectorAll(".seat"))
+        .find(seat =>
+            seat.dataset.section === removedTicket.section &&
+            seat.dataset.row === removedTicket.row &&
+            seat.dataset.seat === removedTicket.seat
+        );
+
+    // Restore the seat's available state
+    if (seat) {
+        updateSeatState(seat, "available");
+    }
+
+    // Remove the ticket from the cart
+    cart.splice(index, 1);
+
+    // Refresh cart display and total
+    renderCart();
+}
+
 
 
 // Currently selected seat

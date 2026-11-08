@@ -253,3 +253,25 @@ button:focus-visible {
     margin-top: 16px;
     text-align: right;
 }
+
+
+#cart-items li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.cart-remove {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    color: var(--text);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.cart-remove:hover {
+    background: var(--page);
+    border-color: var(--muted);
+}
