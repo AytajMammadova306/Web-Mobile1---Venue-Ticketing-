@@ -232,3 +232,8 @@ button:focus-visible {
   background: var(--seat-inspected);
   border-color: var(--seat-inspected-border);
 }
+
+.seat.in-cart {
+    background: var(--seat-in-cart);
+    border-color: var(--seat-in-cart-border);
+}

@@ -86,14 +86,9 @@ function generateVenue() {
                     section.unavailableSeats.includes(seatId);
 
                 if (isUnavailable) {
-                    seat.classList.add("unavailable");
-                    seat.disabled = true;
-                    seat.setAttribute("aria-label",
-                        `${section.name}, Row ${rowLetter}, Seat ${j}, unavailable`);
+                    updateSeatState(seat, "unavailable");
                 } else {
-                    seat.classList.add("available");
-                    seat.setAttribute("aria-label",
-                        `${section.name}, Row ${rowLetter}, Seat ${j}, available`);
+                    updateSeatState(seat, "available");
                 }
 
                 rowElement.appendChild(seat);
@@ -125,6 +120,29 @@ const detailStatus = document.getElementById("detail-status");
 
 const addToCartButton = document.getElementById("add-to-cart");
 
+
+
+function updateSeatState(seat, newState) {
+
+    seat.classList.remove(
+        "available",
+        "inspected",
+        "in-cart",
+        "unavailable"
+    );
+
+    seat.classList.add(newState);
+
+    seat.disabled = newState === "unavailable";
+
+    seat.setAttribute(
+        "aria-label",
+        `${seat.dataset.section}, Row ${seat.dataset.row}, Seat ${seat.dataset.seat}, ${newState}`
+    );
+}
+
+
+
 // Listen for seat clicks
 venue.addEventListener("click", function(event) {
 
@@ -137,12 +155,12 @@ venue.addEventListener("click", function(event) {
 
     // Reset previously selected seat
     if (selectedSeat !== null) {
-        selectedSeat.classList.remove("inspected");
+        updateSeatState(selectedSeat, "available");
     }
 
     // Select the new seat
     selectedSeat = clickedSeat;
-    selectedSeat.classList.add("inspected");
+    updateSeatState(selectedSeat, "inspected");
 
     // Display seat information
     detailSection.textContent = selectedSeat.dataset.section;
