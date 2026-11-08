@@ -62,7 +62,7 @@ function generateVenue() {
                 const seat = document.createElement("button");
 
                 seat.type = "button";
-                seat.classList.add("seat");
+                seat.classList.add("seat", section.id);
 
                 seat.textContent = j;
 

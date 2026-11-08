@@ -15,6 +15,8 @@
   --seat-in-cart-border: #2b6b42;
   --seat-unavailable: #b9bec4;
   --seat-unavailable-border: #9aa0a7;
+  --seat-center: #d9d2e9;
+  --seat-center-border: #9987b8;
 
   --radius: 4px;
   --gap: 16px;
@@ -126,3 +128,7 @@ button:focus-visible {
   cursor: not-allowed;
 }
 
+.seat.center.available {
+  background: var(--seat-center);
+  border-color: var(--seat-center-border);
+}
